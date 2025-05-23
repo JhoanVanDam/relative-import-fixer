@@ -10,13 +10,17 @@
     "dev": "tsup --watch",
     "build": "tsup"
   },
+  "prettier": {
+    "printWidth": 200
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ts-morph": "^22.0.0"
   },
   "devDependencies": {
+    "@types/node": "^22.15.21",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   }

@@ -1,38 +1,17 @@
-#!/usr/bin/env node
-
-import fs from "fs";
-import readline from "readline";
 import { Project } from "ts-morph";
+import { dependencyNames } from "./package-dependencies";
 
-// 🔹 Crear interfaz de readline
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+interface FixRelativeImportsProps {
+  globPattern: string;
+  tsConfigPath: string;
+}
 
-// 🔹 Función para preguntar por consola
-const ask = (question: string) =>
-  new Promise<string>((resolve) => rl.question(question, resolve));
-
-(async () => {
-  // 🧠 Preguntar por los parámetros
-  const tsConfigPath = await ask(
-    "📁 Ruta a tsconfig.json (ej: ./tsconfig.json): "
-  );
-  const globPattern = await ask(
-    "🌀 Glob de archivos (ej: src/**/*.{ts,tsx}): "
-  );
-
-  rl.close();
-
-  // 🔍 Validar que el archivo existe
-  if (!fs.existsSync(tsConfigPath)) {
-    console.error(`❌ No se encontró el archivo ${tsConfigPath}`);
-    process.exit(1);
-  }
-
+export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelativeImportsProps) {
   // 🚀 Procesar archivos con ts-morph
   const project = new Project({ tsConfigFilePath: tsConfigPath });
+
+  const dependencies = dependencyNames;
+  console.log("📄 dependencies:", dependencies);
 
   project.addSourceFilesAtPaths(globPattern);
 
@@ -41,6 +20,7 @@ const ask = (question: string) =>
 
     sourceFile.getImportDeclarations().forEach((importDecl) => {
       const moduleSpecifier = importDecl.getModuleSpecifierValue();
+      console.log("moduleSpecifier", moduleSpecifier);
       if (moduleSpecifier.startsWith(".")) {
         importDecl.remove();
       }
@@ -60,4 +40,4 @@ const ask = (question: string) =>
 
   await project.save();
   console.log("🎉 Imports locales eliminados y reparados");
-})();
+}
