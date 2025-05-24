@@ -1,3 +1,10 @@
+#!/usr/bin/env node
+
+/**
+ * @license MIT
+ * Copyright (c) 2025 Jhoan Hernández
+ */
+
 import { checkGitStatusAndExitIfDirty } from "core/git-changes";
 import { hasAbsoluteTsconfigPaths } from "core/has-absolute-paths";
 import { fixRelativeImports } from "core/transformer";

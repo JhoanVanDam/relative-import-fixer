@@ -1,20 +1,30 @@
 {
   "name": "relative-import-fixer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "bin": {
-    "ts-import-fixer": "./dist/bin/index.js"
+    "relative-import-fixer": "./dist/index.js"
   },
   "scripts": {
-    "dev": "tsup --watch",
     "build": "tsup"
   },
   "prettier": {
     "printWidth": 200
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "typescript",
+    "imports",
+    "import-fixer",
+    "relative-imports",
+    "ts-morph",
+    "code-transformation",
+    "cli-tool",
+    "nodejs",
+    "typescript-transformer",
+    "absolute-imports"
+  ],
+  "author": "Jhoan Hernández",
   "license": "MIT",
   "dependencies": {
     "simple-git": "^3.27.0",
