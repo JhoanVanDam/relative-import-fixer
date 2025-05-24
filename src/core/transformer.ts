@@ -1,5 +1,5 @@
 import { Project } from "ts-morph";
-import { isNodeBuiltin, isPackageJsonDependency, isRelativeImport } from "utils/import-utils";
+import { isNodeBuiltin, isPackageJsonDependency, isRelativeImport, isSideEffectImport } from "utils/import-utils";
 
 interface FixRelativeImportsProps {
   globPattern: string;
@@ -32,6 +32,8 @@ export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelat
     sourceFile.getImportDeclarations().forEach((importDecl) => {
       const moduleSpecifier = importDecl.getModuleSpecifierValue();
 
+      // Only process non sideEffect imports
+      if (isSideEffectImport(importDecl)) return;
       // Only process relative imports
       if (!isRelativeImport(moduleSpecifier)) return;
 

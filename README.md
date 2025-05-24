@@ -31,7 +31,15 @@ npm install relative-import-fixer
 Run the command in your project root:
 
 ```bash
-run-relative-import-fixer or npx run-relative-import-fixer or npm run-relative-import-fixer or pnpm run-relative-import-fixer
+npx run-relative-import-fixer
+```
+
+```bash
+npm run-relative-import-fixer
+```
+
+```bash
+pnpm run-relative-import-fixer
 ```
 
 The script will prompt you for:
@@ -62,6 +70,9 @@ Before execution, the script verifies that you have no uncommitted changes and t
 - `checkGitStatusAndExitIfDirty()`: checks git status.
 - `hasAbsoluteTsconfigPaths(tsconfigPath: string)`: validates absolute paths in tsconfig.
 - `verifyTsConfigFile(tsConfigPath: string)`: verifies tsconfig file existence.
+- `isSideEffectImport(importDecl: ImportDeclaration)`: verifies if the import is Side Effect Type ex:(import './index.css').
+- `isPackageJsonDependency(importName: string)`: verifies if the import is from the packageJSON libraries.
+- `isNodeBuiltin(path: string) `: verifies if the import is from the core of Typescript.
 - `fixRelativeImports({ globPattern, tsConfigPath })`: performs the import transformation from relative to absolute.
 
 ---
