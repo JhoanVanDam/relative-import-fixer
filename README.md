@@ -49,6 +49,33 @@ The script will prompt you for:
 
 Before execution, the script verifies that you have no uncommitted changes and that `tsconfig.json` has absolute paths configured.
 
+## 🧰 CLI Usage
+
+```bash
+npx relative-import-fixer [options]
+```
+
+### 📌 Options
+
+| Flag         | Alias | Description                                | Default             |
+| ------------ | ----- | ------------------------------------------ | ------------------- |
+| `--tsconfig` | `-t`  | Path to your `tsconfig.json` file          | `tsconfig.json`     |
+| `--glob`     | `-g`  | Glob pattern for files to process          | `src/**/*.{ts,tsx}` |
+| `--force`    | `-f`  | Skips Git dirty check and forces execution | `false`             |
+| `--help`     | `-h`  | Displays help information                  |                     |
+
+### 📈 Example
+
+```bash
+npx run-relative-import-fixer -t ./tsconfig.base.json -g apps/student/**/*.{ts,tsx} --force
+```
+
+This will:
+
+- Skip Git check
+- Use a custom tsconfig path
+- Fix imports in the specified files
+
 ---
 
 ## How it works
