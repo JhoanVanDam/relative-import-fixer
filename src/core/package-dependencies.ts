@@ -15,5 +15,3 @@ const allDeps = {
 };
 
 export const dependencyNames = Object.keys(allDeps);
-
-console.log(dependencyNames);

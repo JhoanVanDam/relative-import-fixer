@@ -1,5 +1,5 @@
 import { Project } from "ts-morph";
-import { dependencyNames } from "./package-dependencies";
+import { isNodeBuiltin, isPackageJsonDependency, isRelativeImport } from "utils/import-utils";
 
 interface FixRelativeImportsProps {
   globPattern: string;
@@ -7,32 +7,30 @@ interface FixRelativeImportsProps {
 }
 
 export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelativeImportsProps) {
-  // 🚀 Procesar archivos con ts-morph
-
   const project = new Project({ tsConfigFilePath: tsConfigPath });
-
-  const dependencies = dependencyNames;
 
   project.addSourceFilesAtPaths(globPattern);
 
-  // 🔍 Recorrer archivos
-
   project.getSourceFiles().forEach((sourceFile) => {
-    console.log("📄 Processing file:", sourceFile.getBaseName());
-
     sourceFile.getImportDeclarations().forEach((importDecl) => {
       const moduleSpecifier = importDecl.getModuleSpecifierValue();
-      const resolvedSourceFile = importDecl.getModuleSpecifierSourceFile();
-      const pathDeclaration = resolvedSourceFile?.getFilePath();
-      if (!pathDeclaration) return;
-      const isLib = dependencies.includes(pathDeclaration);
-      if (isLib) return; //is node module lib
 
-      if (moduleSpecifier.startsWith(".")) {
+      // Solo procesamos imports relativos
+      if (!isRelativeImport(moduleSpecifier)) return;
+      // Solo procesamos imports relativos
+      const resolvedFile = importDecl.getModuleSpecifierSourceFile();
+      if (!resolvedFile) return;
+
+      // Si no es un módulo de Node.js ni una dependencia externa, lo eliminamos
+      const importName = resolvedFile.getBaseNameWithoutExtension();
+      const isExternal = isNodeBuiltin(moduleSpecifier) || isPackageJsonDependency(importName);
+
+      if (!isExternal) {
         importDecl.remove();
       }
     });
 
+    // Reparar los imports faltantes y organizar
     sourceFile.fixMissingImports(
       {},
       {
