@@ -1,7 +1,5 @@
-import fs from "fs";
 import readline from "readline";
 import { fixRelativeImports } from "./core/transformer";
-
 // 🔹 Crear interfaz de readline
 const rl = readline.createInterface({
   input: process.stdin,
@@ -13,16 +11,13 @@ const ask = (question: string) => new Promise<string>((resolve) => rl.question(q
 
 (async () => {
   // 🧠 Preguntar por los parámetros
-  const tsConfigPath = await ask("📁 Ruta a tsconfig.json (ej: ./tsconfig.json): ");
-  const globPattern = await ask("🌀 Glob de archivos (ej: src/**/*.{ts,tsx}): ");
+  const tsConfigPathInput = await ask("📁 Ruta a tsconfig.json (ej: ./tsconfig.json): ");
+  const globPatternInput = await ask("🌀 Glob de archivos (ej: src/**/*.{ts,tsx}): ");
+
+  const tsConfigPath = tsConfigPathInput.trim() || "tsconfig.json";
+  const globPattern = globPatternInput.trim() || "src/**/*.{ts,tsx}";
 
   rl.close();
-
-  // 🔍 Validar que el archivo existe
-  if (!fs.existsSync(tsConfigPath)) {
-    console.error(`❌ No se encontró el archivo ${tsConfigPath}`);
-    process.exit(1);
-  }
 
   fixRelativeImports({ globPattern, tsConfigPath });
 })();

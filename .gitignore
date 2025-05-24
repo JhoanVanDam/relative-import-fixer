@@ -1,1 +1,48 @@
+# Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+*.log
+
+# Builds
+dist/
+build/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Env
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+*.sw?
+*.sublime-*
+
+# MacOS / Linux / Windows
+.DS_Store
+Thumbs.db
+
+# Optional caches
+.cache/
+.pnp.*
+.expo/
+.next/
+.husky/_/
+
+# Coverage (si usás testing)
+coverage/
+
+# tsup
+*.d.ts
+*.js.map
+
+# bin output
+bin/
