@@ -1,10 +1,10 @@
 {
   "name": "relative-import-fixer",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "CLI tool for TypeScript projects that removes unnecessary relative imports and replaces them with absolute imports based on the paths configured",
   "main": "./dist/index.js",
   "bin": {
-    "relative-import-fixer": "./dist/index.js"
+    "run-relative-import-fixer": "./dist/index.js"
   },
   "types": "dist/index.d.ts",
   "scripts": {

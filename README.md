@@ -27,7 +27,7 @@ npm install relative-import-fixer
 Run the command in your project root:
 
 ```bash
-relative-import-fixer or npx relative-import-fixer
+run-relative-import-fixer or npx run-relative-import-fixer or npm run-relative-import-fixer or pnpm run-relative-import-fixer
 ```
 
 The script will prompt you for:
