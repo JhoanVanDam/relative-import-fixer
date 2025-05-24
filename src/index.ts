@@ -1,8 +1,8 @@
 import { checkGitStatusAndExitIfDirty } from "core/git-changes";
 import { hasAbsoluteTsconfigPaths } from "core/has-absolute-paths";
+import { fixRelativeImports } from "core/transformer";
 import { verifyTsConfigFile } from "core/verify-ts-config-file";
 import readline from "readline";
-import { fixRelativeImports } from "./core/transformer";
 // 🔹 Crear interfaz de readline
 const rl = readline.createInterface({
   input: process.stdin,
