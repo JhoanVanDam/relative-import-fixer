@@ -1,5 +1,5 @@
-import { NewLineKind, Project } from "ts-morph";
-import { detectEOL, isNodeBuiltin, isPackageJsonDependency, isRelativeImport } from "utils/import-utils";
+import { Project } from "ts-morph";
+import { isNodeBuiltin, isPackageJsonDependency, isRelativeImport } from "utils/import-utils";
 
 interface FixRelativeImportsProps {
   globPattern: string;
@@ -12,6 +12,23 @@ export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelat
   project.addSourceFilesAtPaths(globPattern);
 
   for (const sourceFile of project.getSourceFiles()) {
+    let hasChanged = false;
+
+    const diagnostics = sourceFile.getPreEmitDiagnostics();
+    const hasErrrors = diagnostics.length > 0;
+
+    if (hasErrrors) {
+      // El archivo tiene errores
+      console.log(`Errors in file ${sourceFile.getFilePath()}:`);
+      console.log(
+        sourceFile
+          .getPreEmitDiagnostics()
+          .map((d) => d.getMessageText())
+          .join("\n")
+      );
+      hasChanged = true;
+    }
+
     sourceFile.getImportDeclarations().forEach((importDecl) => {
       const moduleSpecifier = importDecl.getModuleSpecifierValue();
 
@@ -27,8 +44,11 @@ export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelat
 
       if (!isExternal) {
         importDecl.remove();
+        hasChanged = true;
       }
     });
+
+    if (!hasChanged || !hasErrrors) continue;
 
     // Fix missing imports and organize
     sourceFile.fixMissingImports(
@@ -41,15 +61,11 @@ export async function fixRelativeImports({ globPattern, tsConfigPath }: FixRelat
 
     sourceFile.organizeImports();
 
-    // Detect and set EOL per file before saving
-    const eol = detectEOL(sourceFile.getFilePath());
-    project.manipulationSettings.set({
-      newLineKind: eol === "crlf" ? NewLineKind.CarriageReturnLineFeed : NewLineKind.LineFeed,
-    });
-
-    console.log("✅ Fixed:", sourceFile.getFilePath());
+    if (hasChanged) {
+      await sourceFile.save();
+      console.log("✅ Fixed and saved:", sourceFile.getFilePath());
+    }
   }
 
-  await project.save();
   console.log("🎉 Local imports removed and repaired");
 }
