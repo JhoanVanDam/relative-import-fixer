@@ -1,3 +1,6 @@
+import { checkGitStatusAndExitIfDirty } from "core/git-changes";
+import { hasAbsoluteTsconfigPaths } from "core/has-absolute-paths";
+import { verifyTsConfigFile } from "core/verify-ts-config-file";
 import readline from "readline";
 import { fixRelativeImports } from "./core/transformer";
 // 🔹 Crear interfaz de readline
@@ -11,11 +14,17 @@ const ask = (question: string) => new Promise<string>((resolve) => rl.question(q
 
 (async () => {
   // 🧠 Preguntar por los parámetros
-  const tsConfigPathInput = await ask("📁 Ruta a tsconfig.json (ej: ./tsconfig.json): ");
-  const globPatternInput = await ask("🌀 Glob de archivos (ej: src/**/*.{ts,tsx}): ");
+
+  await checkGitStatusAndExitIfDirty();
+
+  const tsConfigPathInput = await ask("📁 Path to tsconfig.json (ex: ./tsconfig.json): ");
+  const globPatternInput = await ask("🌀 Glob files (ex: src/**/*.{ts,tsx}): ");
 
   const tsConfigPath = tsConfigPathInput.trim() || "tsconfig.json";
   const globPattern = globPatternInput.trim() || "src/**/*.{ts,tsx}";
+
+  verifyTsConfigFile(tsConfigPath);
+  hasAbsoluteTsconfigPaths(tsConfigPath);
 
   rl.close();
 

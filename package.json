@@ -17,6 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "simple-git": "^3.27.0",
     "ts-morph": "^22.0.0"
   },
   "devDependencies": {
