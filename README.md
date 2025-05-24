@@ -2,6 +2,10 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green)]()
 
+## Demo
+
+![Demo](https://raw.githubusercontent.com/JhoanVanDam/relative-import-fixer/main/demo/demo-working.png)
+
 ## Description
 
 `relative-import-fixer` is a CLI tool for TypeScript projects that removes unnecessary relative imports and replaces them with absolute imports based on the paths configured in `tsconfig.json`.
