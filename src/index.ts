@@ -5,35 +5,35 @@
  * Copyright (c) 2025 Jhoan Hernández
  */
 
+import { Command } from "commander";
 import { checkGitStatusAndExitIfDirty } from "core/git-changes";
 import { hasAbsoluteTsconfigPaths } from "core/has-absolute-paths";
 import { fixRelativeImports } from "core/transformer";
 import { verifyTsConfigFile } from "core/verify-ts-config-file";
-import readline from "readline";
-// 🔹 Crear interfaz de readline
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
-// 🔹 Función para preguntar por consola
-const ask = (question: string) => new Promise<string>((resolve) => rl.question(question, resolve));
+const program = new Command();
+
+program
+  .name("relative-import-fixer")
+  .description("Fix and convert relative imports to absolute imports")
+  .option("-f, --force", "skip Git check and force execution")
+  .option("-t, --tsconfig <path>", "path to tsconfig.json", "tsconfig.json")
+  .option("-g, --glob <pattern>", "glob pattern to match files", "src/**/*.{ts,tsx}")
+  .parse(process.argv);
+
+const options = program.opts();
+console.log("options", options);
 
 (async () => {
-  // 🧠 Preguntar por los parámetros
+  if (!options.force) {
+    await checkGitStatusAndExitIfDirty();
+  }
 
-  await checkGitStatusAndExitIfDirty();
-
-  const tsConfigPathInput = await ask("📁 Path to tsconfig.json (ex: ./tsconfig.json): ");
-  const globPatternInput = await ask("🌀 Glob files (ex: src/**/*.{ts,tsx}): ");
-
-  const tsConfigPath = tsConfigPathInput.trim() || "tsconfig.json";
-  const globPattern = globPatternInput.trim() || "src/**/*.{ts,tsx}";
+  const tsConfigPath = options.tsconfig;
+  const globPattern = options.glob;
 
   verifyTsConfigFile(tsConfigPath);
   hasAbsoluteTsconfigPaths(tsConfigPath);
 
-  rl.close();
-
-  fixRelativeImports({ globPattern, tsConfigPath });
+  await fixRelativeImports({ globPattern, tsConfigPath });
 })();

@@ -1,6 +1,6 @@
 {
   "name": "relative-import-fixer",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "CLI tool for TypeScript projects that removes unnecessary relative imports and replaces them with absolute imports based on the paths configured",
   "main": "./dist/index.js",
   "bin": {
@@ -31,6 +31,7 @@
   "author": "Jhoan Hernández",
   "license": "MIT",
   "dependencies": {
+    "commander": "^14.0.0",
     "simple-git": "^3.27.0",
     "ts-morph": "^22.0.0"
   },
